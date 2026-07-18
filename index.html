@@ -616,7 +616,9 @@ async function generateReplies(){
     });
 
     if(!response.ok){
-      throw new Error('Server responded with ' + response.status);
+      let errBody = '';
+      try{ errBody = (await response.json()).error || ''; }catch(e){}
+      throw new Error('Status ' + response.status + (errBody ? ': ' + errBody : ''));
     }
 
     const parsed = await response.json();
@@ -641,7 +643,7 @@ async function generateReplies(){
     });
 
   }catch(err){
-    hint.textContent = 'Хатогӣ рӯй дод. Аз нав кӯшиш кунед.';
+    hint.textContent = 'Хатогӣ: ' + err.message;
     console.error(err);
   }finally{
     goBtn.disabled = false;
@@ -649,7 +651,4 @@ async function generateReplies(){
   }
 }
 
-goBtn.addEventListener('click', generateReplies);
-</script>
-</body>
-</html>
+goBtn.addEventListene
